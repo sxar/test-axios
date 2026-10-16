@@ -77,6 +77,18 @@ Once running, open your browser to:
 - **Frontend**: http://localhost:5173
 - **API Server**: http://localhost:3001
 
+## Scripts
+
+| Script | What it does |
+|---|---|
+| `npm run dev` | Starts the API server (3001) and the Vite dev server (5173) together |
+| `npm run dev:api` | Starts only the API server |
+| `npm run dev:client` | Starts only the Vite dev server |
+| `npm run build` | Production build of the frontend into `dist/` |
+| `npm run preview` | Serves the production build locally |
+| `npm run lint` | Runs ESLint over the project |
+| `npm run typecheck` | Type-checks the frontend without emitting files |
+
 ## API Endpoints
 
 The Express API server provides the following endpoints:

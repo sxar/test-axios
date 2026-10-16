@@ -101,8 +101,10 @@ taskkill /PID <PID> /F
 ```
 
 2. Or modify ports in:
-   - API: `api/server.js` (change PORT constant)
-   - Frontend: `vite.config.ts` (add server.port option)
+   - API: `api/server.js` (change the `PORT` constant). The frontend calls the API at
+     `http://localhost:3001` directly (see `src/utils/api.ts` and the scenario components),
+     so update those URLs as well when you change the API port.
+   - Frontend: `vite.config.ts` (add a `server.port` option)
 
 ### API Server Not Starting
 
@@ -131,7 +133,6 @@ npm run build
 ## Need Help?
 
 - Read the full [README.md](./README.md)
-- Check the [design specifications](./docs/)
 - Review component source code
 - Inspect browser console for errors
 - Check API server logs in terminal
