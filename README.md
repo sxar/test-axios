@@ -91,6 +91,9 @@ The Express API server provides the following endpoints:
 - `HEAD /api/users` - Get headers only
 - `OPTIONS /api/users` - Get allowed methods
 
+### Service
+- `GET /api/health` - Liveness check (`status`, `uptime` in seconds, `timestamp`)
+
 ### Authentication & Testing
 - `GET /api/protected` - Protected endpoint (requires auth)
 - `GET /api/error/:code` - Simulate error responses
