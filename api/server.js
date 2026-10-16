@@ -38,15 +38,17 @@ app.get('/api/users', (req, res) => {
     filtered = filtered.filter(u => u.status === status);
   }
 
-  const start = (page - 1) * parseInt(limit);
-  const end = start + parseInt(limit);
-  const paginatedUsers = filtered.slice(start, end);
+  const pageNumber = parseInt(page);
+  const pageSize = parseInt(limit);
+  const start = pageNumber * pageSize;
+  const paginatedUsers = filtered.slice(start, start + pageSize);
 
   res.json({
     data: paginatedUsers,
     total: filtered.length,
-    page: parseInt(page),
-    limit: parseInt(limit)
+    totalPages: Math.ceil(filtered.length / pageSize),
+    page: pageNumber,
+    limit: pageSize
   });
 });
 
