@@ -11,6 +11,16 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const startedAt = Date.now();
+
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    uptime: Math.floor((Date.now() - startedAt) / 1000),
+    timestamp: new Date().toISOString()
+  });
+});
+
 const users = [
   { id: 1, firstName: 'John', lastName: 'Doe', email: 'john@example.com', status: 'active', role: 'admin' },
   { id: 2, firstName: 'Jane', lastName: 'Smith', email: 'jane@example.com', status: 'active', role: 'user' },
@@ -237,6 +247,7 @@ app.get('/api/flaky', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`✓ API server running on http://localhost:${PORT}`);
+  console.log(`  - GET    /api/health`);
   console.log(`  - GET    /api/users`);
   console.log(`  - POST   /api/users`);
   console.log(`  - PUT    /api/users/:id`);
