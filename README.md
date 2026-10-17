@@ -90,6 +90,7 @@ The Express API server provides the following endpoints:
 - `DELETE /api/users/:id` - Delete user
 - `HEAD /api/users` - Get headers only
 - `OPTIONS /api/users` - Get allowed methods
+- `POST` and `PUT` require `firstName`, `lastName` and `email`; a missing, empty or invalid field returns `400` with `{ error: 'Validation failed', fields: [...] }`
 
 ### Authentication & Testing
 - `GET /api/protected` - Protected endpoint (requires auth)
