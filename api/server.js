@@ -18,6 +18,40 @@ const users = [
 ];
 let nextId = 4;
 
+const REQUIRED_USER_FIELDS = ['firstName', 'lastName', 'email'];
+
+const EMAIL_LOCAL_PART = /^[a-z0-9_+](?:[a-z0-9._+-]*[a-z0-9_+])?$/i;
+const EMAIL_DOMAIN_LABEL = /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i;
+const EMAIL_TLD = /^[a-z]{2,}$/i;
+
+function isValidEmail(email) {
+  const parts = email.split('@');
+  if (parts.length !== 2) {
+    return false;
+  }
+  const [local, domain] = parts;
+  if (!EMAIL_LOCAL_PART.test(local) || local.includes('..')) {
+    return false;
+  }
+  const labels = domain.split('.');
+  if (labels.length < 2) {
+    return false;
+  }
+  return labels.every(label => EMAIL_DOMAIN_LABEL.test(label)) &&
+    EMAIL_TLD.test(labels[labels.length - 1]);
+}
+
+function validateUserPayload(body = {}) {
+  const fields = REQUIRED_USER_FIELDS.filter(field => {
+    const value = body[field];
+    return typeof value !== 'string' || value.trim() === '';
+  });
+  if (!fields.includes('email') && !isValidEmail(body.email)) {
+    fields.push('email');
+  }
+  return fields;
+}
+
 app.get('/api/users', (req, res) => {
   const { page = 1, limit = 10, search, role, status } = req.query;
   let filtered = [...users];
@@ -60,12 +94,20 @@ app.get('/api/users/:id', (req, res) => {
 });
 
 app.post('/api/users', (req, res) => {
+  const invalid = validateUserPayload(req.body);
+  if (invalid.length > 0) {
+    return res.status(400).json({ error: 'Validation failed', fields: invalid });
+  }
   const user = { id: nextId++, ...req.body, status: 'active' };
   users.push(user);
   res.status(201).json(user);
 });
 
 app.put('/api/users/:id', (req, res) => {
+  const invalid = validateUserPayload(req.body);
+  if (invalid.length > 0) {
+    return res.status(400).json({ error: 'Validation failed', fields: invalid });
+  }
   const index = users.findIndex(u => u.id === parseInt(req.params.id));
   if (index !== -1) {
     users[index] = { ...users[index], ...req.body, id: parseInt(req.params.id) };
