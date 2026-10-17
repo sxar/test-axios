@@ -108,15 +108,14 @@ app.options('/api/users', (req, res) => {
   res.status(200).send();
 });
 
-app.get('/api/protected', (req, res) => {
-  const auth = req.headers.authorization;
-  if (auth && (auth.startsWith('Bearer ') || auth.startsWith('Basic '))) {
-    res.json({ message: 'Protected data', user: 'authenticated', timestamp: Date.now() });
-  } else if (req.headers['x-api-key']) {
-    res.json({ message: 'Protected data', user: 'authenticated', timestamp: Date.now() });
-  } else {
-    res.status(401).json({ error: 'Authentication required' });
-  }
+function requireAuth(req, res, next) {
+  if (req.headers.authorization) return next();
+  if (req.headers['x-api-key']) return next();
+  res.status(401).json({ error: 'Authentication required' });
+}
+
+app.get('/api/protected', requireAuth, (req, res) => {
+  res.json({ message: 'Protected data', user: 'authenticated', timestamp: Date.now() });
 });
 
 app.get('/api/error/:code', (req, res) => {
