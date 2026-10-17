@@ -110,7 +110,7 @@ The Express API server provides the following endpoints:
 - `POST /api/upload/multiple` - Multiple file upload
 - `GET /api/download/:filename` - File download
 
-## Project Structure
+## Project structure
 
 ```
 test-axios/
