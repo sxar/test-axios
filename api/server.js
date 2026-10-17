@@ -20,8 +20,25 @@ let nextId = 4;
 
 const REQUIRED_USER_FIELDS = ['firstName', 'lastName', 'email'];
 
+const EMAIL_LOCAL_PART = /^[a-z0-9_+](?:[a-z0-9._+-]*[a-z0-9_+])?$/i;
+const EMAIL_DOMAIN_LABEL = /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i;
+const EMAIL_TLD = /^[a-z]{2,}$/i;
+
 function isValidEmail(email) {
-  return /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(email);
+  const parts = email.split('@');
+  if (parts.length !== 2) {
+    return false;
+  }
+  const [local, domain] = parts;
+  if (!EMAIL_LOCAL_PART.test(local) || local.includes('..')) {
+    return false;
+  }
+  const labels = domain.split('.');
+  if (labels.length < 2) {
+    return false;
+  }
+  return labels.every(label => EMAIL_DOMAIN_LABEL.test(label)) &&
+    EMAIL_TLD.test(labels[labels.length - 1]);
 }
 
 function validateUserPayload(body = {}) {
