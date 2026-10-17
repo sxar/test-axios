@@ -580,7 +580,7 @@ const [users, posts, comments, stats] = await Promise.all([
                 borderRadius: 'var(--border-radius)'
               }}>
                 <div style={{ marginBottom: '1rem', fontSize: '0.875rem', fontWeight: 600 }}>
-                  Found {searchResults.pagination?.total || 0} results
+                  Found {searchResults.total ?? 0} results
                 </div>
                 {searchResults.data?.slice(0, 5).map((user: any, index: number) => (
                   <div key={index} style={{
