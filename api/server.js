@@ -25,9 +25,9 @@ function applyUserFilters(list, query) {
   if (search) {
     const q = search.toLowerCase();
     result = result.filter(u =>
-      u.firstName.includes(q) ||
-      u.lastName.includes(q) ||
-      u.email.includes(q)
+      u.firstName.toLowerCase().includes(q) ||
+      u.lastName.toLowerCase().includes(q) ||
+      u.email.toLowerCase().includes(q)
     );
   }
 
@@ -43,7 +43,7 @@ function applyUserFilters(list, query) {
 }
 
 function countActive(list) {
-  return list.filter(u => u.status.includes('active')).length;
+  return list.filter(u => u.status === 'active').length;
 }
 
 app.get('/api/users', (req, res) => {
