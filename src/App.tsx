@@ -33,17 +33,17 @@ const menuItems: MenuItem[] = [
   { id: 'request-interceptors', label: 'Request Interceptors', category: 'Tab 3: Interceptors & Error Handling', component: RequestInterceptors },
   { id: 'response-interceptors', label: 'Response Interceptors', category: 'Tab 3: Interceptors & Error Handling', component: ResponseInterceptors },
   { id: 'error-handling', label: 'Error Handling', category: 'Tab 3: Interceptors & Error Handling', component: ErrorHandling },
-  { id: 'file-upload', label: 'File Upload', category: 'Tab 4: Advanced Features', component: FileUpload },
-  { id: 'file-download', label: 'File Download', category: 'Tab 4: Advanced Features', component: FileDownload },
-  { id: 'custom-instances', label: 'Custom Instances & Defaults', category: 'Tab 4: Advanced Features', component: CustomInstances },
-  { id: 'real-world-patterns', label: 'Real-World Patterns', category: 'Tab 4: Advanced Features', component: RealWorldPatterns }
+  { id: 'real-world-patterns', label: 'Real-World Patterns', category: 'Tab 4: Patterns & Advanced Features', component: RealWorldPatterns },
+  { id: 'file-upload', label: 'File Upload', category: 'Tab 4: Patterns & Advanced Features', component: FileUpload },
+  { id: 'file-download', label: 'File Download', category: 'Tab 4: Patterns & Advanced Features', component: FileDownload },
+  { id: 'custom-instances', label: 'Custom Instances & Defaults', category: 'Tab 4: Patterns & Advanced Features', component: CustomInstances }
 ];
 
 const categories = [
   'Tab 1: HTTP Methods & Basics',
   'Tab 2: Configuration & Features',
   'Tab 3: Interceptors & Error Handling',
-  'Tab 4: Advanced Features'
+  'Tab 4: Patterns & Advanced Features'
 ];
 
 function App() {
@@ -81,7 +81,8 @@ function App() {
                     data-testid={`category-${category.toLowerCase().replace(/\s+|:/g, '-')}`}
                   >
                     <span className={`category-icon ${isExpanded ? 'expanded' : ''}`}>▶</span>
-                    <span className="category-label">{category}</span>
+                    <span className="category-label" title={category}>
+                      {category}
                   </button>
 
                   {isExpanded && (
