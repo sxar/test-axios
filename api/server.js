@@ -11,12 +11,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const users = [
-  { id: 1, firstName: 'John', lastName: 'Doe', email: 'john@example.com', status: 'active', role: 'admin' },
-  { id: 2, firstName: 'Jane', lastName: 'Smith', email: 'jane@example.com', status: 'active', role: 'user' },
-  { id: 3, firstName: 'Bob', lastName: 'Johnson', email: 'bob@example.com', status: 'inactive', role: 'user' }
-];
-let nextId = 4;
+const { users, allocateId } = require('./data/users');
 
 app.get('/api/users', (req, res) => {
   const { page = 1, limit = 10, search, role, status } = req.query;
@@ -60,7 +55,7 @@ app.get('/api/users/:id', (req, res) => {
 });
 
 app.post('/api/users', (req, res) => {
-  const user = { id: nextId++, ...req.body, status: 'active' };
+  const user = { id: allocateId(), ...req.body, status: 'active' };
   users.push(user);
   res.status(201).json(user);
 });
