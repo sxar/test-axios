@@ -109,7 +109,8 @@ app.options('/api/users', (req, res) => {
 });
 
 function requireAuth(req, res, next) {
-  if (req.headers.authorization) return next();
+  const auth = req.headers.authorization;
+  if (auth && (auth.startsWith('Bearer ') || auth.startsWith('Basic '))) return next();
   if (req.headers['x-api-key']) return next();
   res.status(401).json({ error: 'Authentication required' });
 }
