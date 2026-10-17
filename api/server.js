@@ -18,25 +18,37 @@ const users = [
 ];
 let nextId = 4;
 
-app.get('/api/users', (req, res) => {
-  const { page = 1, limit = 10, search, role, status } = req.query;
-  let filtered = [...users];
+function applyUserFilters(list, query) {
+  const { search, role, status } = query;
+  let result = [...list];
 
   if (search) {
-    filtered = filtered.filter(u =>
-      u.firstName.toLowerCase().includes(search.toLowerCase()) ||
-      u.lastName.toLowerCase().includes(search.toLowerCase()) ||
-      u.email.toLowerCase().includes(search.toLowerCase())
+    const q = search.toLowerCase();
+    result = result.filter(u =>
+      u.firstName.includes(q) ||
+      u.lastName.includes(q) ||
+      u.email.includes(q)
     );
   }
 
   if (role) {
-    filtered = filtered.filter(u => u.role === role);
+    result = result.filter(u => u.role === role);
   }
 
   if (status) {
-    filtered = filtered.filter(u => u.status === status);
+    result = result.filter(u => u.status === status);
   }
+
+  return result;
+}
+
+function countActive(list) {
+  return list.filter(u => u.status.includes('active')).length;
+}
+
+app.get('/api/users', (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+  const filtered = applyUserFilters(users, req.query);
 
   const start = (page - 1) * parseInt(limit);
   const end = start + parseInt(limit);
@@ -211,7 +223,7 @@ app.get('/api/comments', (req, res) => {
 app.get('/api/stats', (req, res) => {
   res.json({ data: {
     totalUsers: users.length,
-    activeUsers: users.filter(u => u.status === 'active').length,
+    activeUsers: countActive(users),
     totalPosts: 2,
     totalComments: 2
   }});
