@@ -36,6 +36,8 @@ app.get('/api/users', (req, res) => {
 
   if (status) {
     filtered = filtered.filter(u => u.status === status);
+  } else {
+    filtered = filtered.filter(u => u.status !== 'deleted');
   }
 
   const start = (page - 1) * parseInt(limit);
@@ -88,8 +90,8 @@ app.patch('/api/users/:id', (req, res) => {
 app.delete('/api/users/:id', (req, res) => {
   const index = users.findIndex(u => u.id === parseInt(req.params.id));
   if (index !== -1) {
-    users.splice(index, 1);
-    res.status(204).send();
+    users[index] = { ...users[index], status: 'deleted' };
+    res.json(users[index]);
   } else {
     res.status(404).json({ error: 'User not found' });
   }
@@ -210,7 +212,7 @@ app.get('/api/comments', (req, res) => {
 
 app.get('/api/stats', (req, res) => {
   res.json({ data: {
-    totalUsers: users.length,
+    totalUsers: users.filter(u => u.status !== 'deleted').length,
     activeUsers: users.filter(u => u.status === 'active').length,
     totalPosts: 2,
     totalComments: 2

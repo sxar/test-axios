@@ -82,12 +82,12 @@ Once running, open your browser to:
 The Express API server provides the following endpoints:
 
 ### User Management
-- `GET /api/users` - List users (supports pagination, search, filters)
+- `GET /api/users` - List users (supports pagination, search, filters; deleted users are hidden unless `status=deleted`)
 - `GET /api/users/:id` - Get single user
 - `POST /api/users` - Create new user
 - `PUT /api/users/:id` - Update entire user
 - `PATCH /api/users/:id` - Partially update user
-- `DELETE /api/users/:id` - Delete user
+- `DELETE /api/users/:id` - Mark user as deleted (`status: 'deleted'`) and return the updated user
 - `HEAD /api/users` - Get headers only
 - `OPTIONS /api/users` - Get allowed methods
 
@@ -110,7 +110,7 @@ The Express API server provides the following endpoints:
 - `POST /api/upload/multiple` - Multiple file upload
 - `GET /api/download/:filename` - File download
 
-## Project Structure
+## Project structure
 
 ```
 test-axios/
