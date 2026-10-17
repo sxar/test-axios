@@ -78,6 +78,9 @@ export default function RealWorldPatterns() {
     }
   };
 
+  const totalPages = paginationData ? Math.floor(paginationData.total / pageSize) : 0;
+  const isLastPage = paginationData !== null && currentPage >= totalPages;
+
   const fetchConcurrent = async () => {
     setConcurrentStatus('loading');
     setConcurrentResults([]);
@@ -349,20 +352,22 @@ export default function RealWorldPatterns() {
                 Previous
               </button>
 
-              <span style={{ fontWeight: 600 }}>Page {currentPage}</span>
+              <span style={{ fontWeight: 600 }}>
+                Page {currentPage}{paginationData && ` of ${totalPages}`}
+              </span>
 
               <button
                 onClick={() => fetchPage(currentPage + 1)}
                 data-testid="next-page"
-                disabled={paginationData?.pagination?.hasMore === false || paginationStatus === 'loading'}
+                disabled={isLastPage || paginationStatus === 'loading'}
                 style={{
                   padding: '0.5rem 1rem',
                   background: 'var(--primary-color)',
                   color: 'white',
                   border: 'none',
                   borderRadius: 'var(--border-radius)',
-                  cursor: paginationData?.pagination?.hasMore === false ? 'not-allowed' : 'pointer',
-                  opacity: paginationData?.pagination?.hasMore === false ? 0.4 : 1
+                  cursor: isLastPage ? 'not-allowed' : 'pointer',
+                  opacity: isLastPage ? 0.4 : 1
                 }}
               >
                 Next
@@ -391,8 +396,8 @@ export default function RealWorldPatterns() {
                 borderRadius: 'var(--border-radius)'
               }}>
                 <div style={{ marginBottom: '1rem', fontSize: '0.875rem' }}>
-                  <strong>Showing:</strong> {paginationData.pagination.total} users •
-                  Page {paginationData.pagination.page} of {paginationData.pagination.totalPages}
+                  <strong>Showing:</strong> {paginationData.total} users •
+                  Page {paginationData.page} of {totalPages}
                 </div>
                 <div style={{ fontSize: '0.875rem' }}>
                   {paginationData.data.map((user: any, index: number) => (
