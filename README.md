@@ -82,7 +82,7 @@ Once running, open your browser to:
 The Express API server provides the following endpoints:
 
 ### User Management
-- `GET /api/users` - List users (supports pagination, search, filters)
+- `GET /api/users` - List users (supports pagination, search, filters; returns `total` and `totalPages`)
 - `GET /api/users/:id` - Get single user
 - `POST /api/users` - Create new user
 - `PUT /api/users/:id` - Update entire user

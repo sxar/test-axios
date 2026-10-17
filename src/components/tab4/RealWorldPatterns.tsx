@@ -59,6 +59,8 @@ export default function RealWorldPatterns() {
     }
   };
 
+  const isLastPage = paginationData !== null && currentPage >= paginationData.totalPages;
+
   const fetchPage = async (page: number) => {
     setPaginationStatus('loading');
 
@@ -354,15 +356,15 @@ export default function RealWorldPatterns() {
               <button
                 onClick={() => fetchPage(currentPage + 1)}
                 data-testid="next-page"
-                disabled={paginationData?.pagination?.hasMore === false || paginationStatus === 'loading'}
+                disabled={isLastPage || paginationStatus === 'loading'}
                 style={{
                   padding: '0.5rem 1rem',
                   background: 'var(--primary-color)',
                   color: 'white',
                   border: 'none',
                   borderRadius: 'var(--border-radius)',
-                  cursor: paginationData?.pagination?.hasMore === false ? 'not-allowed' : 'pointer',
-                  opacity: paginationData?.pagination?.hasMore === false ? 0.4 : 1
+                  cursor: isLastPage ? 'not-allowed' : 'pointer',
+                  opacity: isLastPage ? 0.4 : 1
                 }}
               >
                 Next
@@ -391,8 +393,8 @@ export default function RealWorldPatterns() {
                 borderRadius: 'var(--border-radius)'
               }}>
                 <div style={{ marginBottom: '1rem', fontSize: '0.875rem' }}>
-                  <strong>Showing:</strong> {paginationData.pagination.total} users •
-                  Page {paginationData.pagination.page} of {paginationData.pagination.totalPages}
+                  <strong>Showing:</strong> {paginationData.total} users •
+                  Page {paginationData.page} of {paginationData.totalPages}
                 </div>
                 <div style={{ fontSize: '0.875rem' }}>
                   {paginationData.data.map((user: any, index: number) => (
@@ -429,13 +431,10 @@ const response = await axios.get('/api/users', {
 // Response structure
 {
   data: [...], // Current page items
-  pagination: {
-    page: 1,
-    limit: 10,
-    total: 50,
-    totalPages: 5,
-    hasMore: true
-  }
+  total: 50,
+  totalPages: 5,
+  page: 1,
+  limit: 10
 }`}
             </pre>
           </DisplayCard>
@@ -581,7 +580,7 @@ const [users, posts, comments, stats] = await Promise.all([
                 borderRadius: 'var(--border-radius)'
               }}>
                 <div style={{ marginBottom: '1rem', fontSize: '0.875rem', fontWeight: 600 }}>
-                  Found {searchResults.pagination?.total || 0} results
+                  Found {searchResults.total ?? 0} results
                 </div>
                 {searchResults.data?.slice(0, 5).map((user: any, index: number) => (
                   <div key={index} style={{
