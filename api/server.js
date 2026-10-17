@@ -38,8 +38,10 @@ app.get('/api/users', (req, res) => {
     filtered = filtered.filter(u => u.status === status);
   }
 
-  const pageNumber = Math.max(1, parseInt(page, 10) || 1);
-  const pageSize = Math.max(1, parseInt(limit, 10) || 10);
+  const requestedPage = parseInt(page, 10);
+  const requestedLimit = parseInt(limit, 10);
+  const pageNumber = Number.isNaN(requestedPage) ? 1 : Math.max(1, requestedPage);
+  const pageSize = Number.isNaN(requestedLimit) ? 10 : Math.max(1, requestedLimit);
   const start = (pageNumber - 1) * pageSize;
   const paginatedUsers = filtered.slice(start, start + pageSize);
 
